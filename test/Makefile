@@ -1,15 +1,17 @@
 CFLAGS ?= -g -O2 -Wall -D_GNU_SOURCE -L../src/
 
 all_targets += io_uring-test io_uring-cp poll poll-cancel ring-leak fsync \
-	io_uring_setup io_uring_register io_uring_enter
+	io_uring_setup io_uring_register io_uring_enter io_uring-server
 
 all: $(all_targets)
 
 test_srcs := io_uring-test.c io_uring-cp.c poll.c poll-cancel.c ring-leak.c \
-	fsync.c io_uring_setup.c io_uring_register.c io_uring_enter.c
+	fsync.c io_uring_setup.c io_uring_register.c io_uring_enter.c io_uring-server.c
 
 test_objs := $(patsubst %.c,%.ol,$(test_srcs))
 
+io_uring-server: io_uring-server.c
+	$(CC) $(CFLAGS) -o $@ io_uring-server.c -luring
 io_uring-test: io_uring-test.c
 	$(CC) $(CFLAGS) -o $@ io_uring-test.c -luring
 io_uring-cp: io_uring-cp.c
